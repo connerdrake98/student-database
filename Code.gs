@@ -293,7 +293,7 @@ function saveNewRecord () {
   dataWS.setActiveSelection("A1");
   
   // set correct database number in the settings worksheet
-  setDatabaseNumberSettings(findNextEmptyDataRow() - 1);
+  setDatabaseNumberSettings(findNextEmptyDataRow());
   
   // sync Form Worksheet database number with database number from settings
   settingsWS.getRange("A2").setValue(getDatabaseNumberSettings());
