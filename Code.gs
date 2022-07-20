@@ -206,7 +206,7 @@ function setErrorMessageSetting(settingID, valueToSet) {
 
 function generateStudentRowNumbers() {
   // TODO A2 is hard-coded as the database number in settings. Add a global variable or object and replace with the id here.
-  return Array.from({ length: settingsWS.getRange("A2").getValue() - 1 }, (_, i) => i + 2);
+  return Array.from({ length: settingsWS.getRange("A2").getValue() }, (_, i) => i + 2);
 }
 
 /*************************************************************************/
@@ -252,7 +252,7 @@ function findNextEmptyDataRow() {
     currCell = dataWS.getRange(i, 1); 
     }
   }
-  return i ;
+  return i - 1;
 }
 
 
@@ -547,6 +547,12 @@ function search(searchType){
 // TODO: Consider case where someone wants to change the student ID. I need to report errors saying you must delee the student and re-make another student with a different ID.
 // Edit current student's info.
 function syncStudentInfo() {
+  // set correct database number in the settings worksheet
+  setDatabaseNumberSettings(findNextEmptyDataRow() - 1);
+  
+  // sync Form Worksheet database number with database number from settings
+  settingsWS.getRange("A2").setValue(getDatabaseNumberSettings());
+  
   // check to make sure there is a student present at the database number
   let databaseNumInputCellFormWS = inputFieldsObject[databasePropertyID].inputCell
   let formWSDatabaseNum = formWS.getRange(databaseNumInputCellFormWS).getValue();
@@ -572,7 +578,7 @@ function syncStudentInfo() {
     return true;
   });
                                        
-  
+  // DEBUG: matchingIDRowNum is -1...
   if (!dataWSFirstCellDataAtDatabaseNum || matchingIDRowNum === -1) {
     alertUser('No valid student loaded. Make sure to search for and load a student before attempting to change their information. Note that to change a Family/Student ID, the student must be deleted and a new student must be created.');
     return -2;
@@ -609,6 +615,11 @@ function syncStudentInfo() {
      }
    }
   console.log(inputtedChanges);
+  
+  if (inputtedChanges.length === 0) {
+    alertUser('The inputted information is the same as the student record information and no changes will be made.')
+    return false;
+  }
   
   // confirm changes
   // TODO somewhat hard-coded here, fix later with computer property IDs.
