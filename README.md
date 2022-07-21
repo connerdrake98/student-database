@@ -1,4 +1,7 @@
 # student-database
+
+Warning: This way of storing student information is very basic and is suited for a quick but non-permanent solution, as all of the functionality happens within Google Sheets, which makes it very easy to set up and good for people who are not as tech-savvy, but not as robust as something that is better engineered. It may be best to migrate to a more robust solution in the future like a relational database attached to a web app.
+
 A simple google sheets database access script. This README includes instructions on how to copy a simple Google Sheets UI for student database access as well as where to paste the code that allows searching/modifying the database from the UI.
 
 
